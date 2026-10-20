@@ -1,0 +1,11 @@
+{
+  "name": "recur-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Recur marketing website and product platform workspace",
+  "scripts": {
+    "dev": "node website/server.mjs",
+    "check": "node website/check.mjs"
+  }
+}
+
