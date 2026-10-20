@@ -3,9 +3,17 @@
   "private": true,
   "version": "0.1.0",
   "description": "Recur marketing website and product platform workspace",
+  "packageManager": "pnpm@10.18.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "node website/server.mjs",
-    "check": "node website/check.mjs"
+    "dev": "pnpm --filter @recur/website dev",
+    "build": "pnpm --filter @recur/website build",
+    "check": "pnpm --filter @recur/website check",
+    "reference": "node website/server.mjs",
+    "check:reference": "node website/check.mjs"
   }
 }
 
