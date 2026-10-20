@@ -19,22 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @recur/website build
-        env:
-          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      - name: Configure custom domain
+        run: echo "recurfx.com" > website/dist/CNAME
       - name: Add GitHub Pages SPA fallback
-        run: cp apps/website/dist/index.html apps/website/dist/404.html
+        run: cp website/dist/index.html website/dist/404.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/website/dist
+          path: website/dist
 
   deploy:
     environment:
