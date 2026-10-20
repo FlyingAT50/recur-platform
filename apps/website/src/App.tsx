@@ -1,6 +1,7 @@
 import { ArrowRight, Check, Menu, X } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
+import { Platform } from "./platform/Platform";
 
 const navigation = [
   ["How it works", "/#how-it-works"],
@@ -23,6 +24,7 @@ function Header() {
       <nav className={open ? "nav open" : "nav"} aria-label="Primary">
         {navigation.map(([label, href]) => href.startsWith("/#") ? <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a> : <NavLink key={href} to={href} onClick={() => setOpen(false)}>{label}</NavLink>)}
       </nav>
+      <Link className="sign-in-link" to="/app">Sign in</Link>
       <a className="button button-small header-cta" href="#register">Find a Recur dealer</a>
     </header>
   );
@@ -32,7 +34,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div><Logo /><p>A new way to rent, return and renew premium bikes.</p></div>
-      <div className="footer-links"><Link to="/about">About</Link><Link to="/dealers">For dealers</Link><Link to="/manufacturers">For manufacturers</Link><a href="mailto:hello@recur.exchange">Contact</a></div>
+      <div className="footer-links"><Link to="/app">Sign in</Link><Link to="/about">About</Link><Link to="/dealers">For dealers</Link><Link to="/manufacturers">For manufacturers</Link><a href="mailto:hello@recur.exchange">Contact</a></div>
       <p className="legal">Recur plans are subject to eligibility, availability and agreement terms. End-of-term return or renewal options depend on the applicable agreement and the bike meeting agreed condition and servicing requirements. © 2026 Recur.</p>
     </footer>
   );
@@ -99,7 +101,7 @@ function ContentPage({ kind }: { kind: keyof typeof pageContent }) {
 }
 
 function App() {
-  return <Routes><Route path="/" element={<Home />} /><Route path="/dealers" element={<ContentPage kind="dealers" />} /><Route path="/manufacturers" element={<ContentPage kind="manufacturers" />} /><Route path="/about" element={<ContentPage kind="about" />} /><Route path="*" element={<Home />} /></Routes>;
+  return <Routes><Route path="/" element={<Home />} /><Route path="/dealers" element={<ContentPage kind="dealers" />} /><Route path="/manufacturers" element={<ContentPage kind="manufacturers" />} /><Route path="/about" element={<ContentPage kind="about" />} /><Route path="/app/*" element={<Platform />} /><Route path="*" element={<Home />} /></Routes>;
 }
 
 export default App;

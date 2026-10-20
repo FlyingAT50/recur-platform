@@ -21,6 +21,11 @@ pnpm dev
 The website includes the Recur homepage, payment illustration, responsive
 navigation and initial dealer, manufacturer and about pages.
 
+The connected application is available at `/app`. Its demonstration sign-in
+opens the consumer, dealer and Recur Operations workspaces using shared sample
+records. The database security model is defined in `database/schema.sql` and is
+ready to be applied to a dedicated Recur Supabase project.
+
 ## Run the reference snapshot
 
 ```sh
@@ -38,6 +43,13 @@ The platform will support three signed-in roles:
 - Recur Operations manages the complete lifecycle, with sensitive finance data
   restricted to specifically authorised colleagues.
 
-The next build phase adds the platform application, authentication, role-based
-permissions, database and working enquiry capture.
+## Backend status
+
+- A Supabase client is included but remains disabled until Recur project values
+  are supplied in `apps/website/.env.local`.
+- `database/schema.sql` separates private financial records from operational
+  agreement dates and explicitly provides no dealer access to finance data.
+- All exposed application tables have row-level security enabled in the draft.
+- The current screens use demonstration records so that the complete role flow
+  can be reviewed before connecting personal or financial information.
 
