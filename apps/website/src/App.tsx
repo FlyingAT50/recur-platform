@@ -2,6 +2,7 @@ import { ArrowRight, Check, Menu, X } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
 import { Platform } from "./platform/Platform";
+import { supabase } from "./lib/supabase";
 
 const navigation = [
   ["How it works", "/#how-it-works"],
@@ -84,9 +85,15 @@ function Calculator() {
 }
 
 function Register() {
-  const [sent, setSent] = useState(false);
-  function submit(e: FormEvent) { e.preventDefault(); setSent(true); }
-  return <section id="register" className="register section"><div><p className="eyebrow">Be first in line</p><h2>Your next bike starts here.</h2><p>Register for Recur launch news and participating dealer updates.</p></div>{sent ? <div className="success"><Check/> Thanks — you’re on the list.</div> : <form onSubmit={submit}><label><span>Email address</span><input required type="email" name="email" placeholder="you@example.com" /></label><button className="button" type="submit">Register your interest <ArrowRight size={18}/></button></form>}</section>;
+  const [state, setState] = useState<"idle" | "submitting" | "sent" | "error">("idle");
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault(); setState("submitting");
+    if (!supabase) { setState("error"); return; }
+    const email = String(new FormData(e.currentTarget).get("email") || "").trim();
+    const { error } = await supabase.from("enquiries").insert({ kind: "consumer", email, consent_at: new Date().toISOString() });
+    setState(error ? "error" : "sent");
+  }
+  return <section id="register" className="register section"><div><p className="eyebrow">Be first in line</p><h2>Your next bike starts here.</h2><p>Register for Recur launch news and participating dealer updates.</p></div>{state === "sent" ? <div className="success"><Check/> Thanks — you’re on the list.</div> : <form onSubmit={submit}><label><span>Email address</span><input required type="email" name="email" placeholder="you@example.com" /></label><button className="button" disabled={state === "submitting"} type="submit">{state === "submitting" ? "Registering…" : "Register your interest"} <ArrowRight size={18}/></button>{state === "error" && <p className="form-error">We couldn’t save that just now. Please try again.</p>}</form>}</section>;
 }
 
 const pageContent = {

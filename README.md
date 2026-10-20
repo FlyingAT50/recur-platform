@@ -45,11 +45,15 @@ The platform will support three signed-in roles:
 
 ## Backend status
 
-- A Supabase client is included but remains disabled until Recur project values
-  are supplied in `apps/website/.env.local`.
+- A dedicated Recur Supabase project is active in London (`eu-west-2`) with
+  project reference `wksrszxndpqyachsgznc`.
+- The local website is connected using the project URL and publishable browser
+  key stored in the ignored `apps/website/.env.local` file.
 - `database/schema.sql` separates private financial records from operational
   agreement dates and explicitly provides no dealer access to finance data.
-- All exposed application tables have row-level security enabled in the draft.
+- All application tables have row-level security enabled and the Supabase
+  security advisor reports no findings.
+- Public enquiry capture has been verified end to end through the Data API.
 - The current screens use demonstration records so that the complete role flow
   can be reviewed before connecting personal or financial information.
 

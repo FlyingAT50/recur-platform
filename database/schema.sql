@@ -105,6 +105,22 @@ create table public.enquiries (
   created_at timestamptz not null default now()
 );
 
+create index profiles_organization_idx on public.profiles (organization_id);
+create index bikes_manufacturer_org_idx on public.bikes (manufacturer_org_id);
+create index bikes_current_dealer_org_idx on public.bikes (current_dealer_org_id);
+create index agreements_consumer_idx on public.agreements (consumer_id);
+create index agreements_bike_idx on public.agreements (bike_id);
+create index agreements_dealer_org_idx on public.agreements (dealer_org_id);
+create index agreements_finance_provider_org_idx on public.agreements (finance_provider_org_id);
+create index service_events_bike_idx on public.service_events (bike_id);
+create index service_events_agreement_idx on public.service_events (agreement_id);
+create index service_events_dealer_org_idx on public.service_events (dealer_org_id);
+create index service_events_technician_idx on public.service_events (technician_user_id);
+create index lifecycle_events_bike_idx on public.lifecycle_events (bike_id);
+create index lifecycle_events_agreement_idx on public.lifecycle_events (agreement_id);
+create index lifecycle_events_actor_user_idx on public.lifecycle_events (actor_user_id);
+create index lifecycle_events_actor_org_idx on public.lifecycle_events (actor_org_id);
+
 create or replace function private.current_profile()
 returns public.profiles
 language sql
@@ -146,11 +162,11 @@ using (
   or (private.current_profile()).role = 'operations'
 );
 
-create policy "consumer finance access" on private.agreement_finance for select to authenticated
-using (exists (select 1 from public.agreements a where a.id = agreement_id and a.consumer_id = (select auth.uid())));
-
-create policy "authorized operations finance access" on private.agreement_finance for select to authenticated
-using ((private.current_profile()).role = 'operations' and (private.current_profile()).finance_authorized);
+create policy "finance access by authorized role" on private.agreement_finance for select to authenticated
+using (
+  exists (select 1 from public.agreements a where a.id = agreement_id and a.consumer_id = (select auth.uid()))
+  or ((private.current_profile()).role = 'operations' and (private.current_profile()).finance_authorized)
+);
 
 create policy "service history access" on public.service_events for select to authenticated
 using (exists (select 1 from public.bikes b where b.id = bike_id));
