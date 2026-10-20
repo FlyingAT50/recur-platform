@@ -26,6 +26,10 @@ opens the consumer, dealer and Recur Operations workspaces using shared sample
 records. The database security model is defined in `database/schema.sql` and is
 ready to be applied to a dedicated Recur Supabase project.
 
+Production deployment is automated through GitHub Pages from the `main` branch.
+The custom domain is `recurfx.com`; `www.recurfx.com` should redirect to the
+apex domain once DNS propagation is complete.
+
 ## Run the reference snapshot
 
 ```sh
